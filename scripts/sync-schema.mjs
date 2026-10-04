@@ -1,9 +1,12 @@
 // Keep the vendored schema/ and the spec stamp in step with the OpenBook
 // specification. Mirrors openbook-translate's `update` command: no git writes.
 //
-//   node scripts/sync-schema.mjs           copy from a sibling ../openbook checkout
-//                                          when present, else from GitHub main
-//   node scripts/sync-schema.mjs --remote  always fetch from GitHub main
+// The source of truth is the specification's GitHub main, so a check is
+// reproducible anywhere. Pass --local to compare against a sibling ../openbook
+// checkout instead.
+//
+//   node scripts/sync-schema.mjs           copy from the spec's GitHub main
+//   node scripts/sync-schema.mjs --local   copy from a sibling ../openbook checkout
 //   node scripts/sync-schema.mjs --check   do not write; exit 1 when the vendored
 //                                          files or the stamp have drifted
 import { readFileSync, writeFileSync, readdirSync, existsSync, mkdirSync } from "node:fs";
@@ -19,9 +22,7 @@ const API = "https://api.github.com/repos/openbook-data-standards/openbook/conte
 
 const args = new Set(process.argv.slice(2));
 const check = args.has("--check");
-const forceRemote = args.has("--remote");
-
-const useLocal = () => !forceRemote && existsSync(join(LOCAL_SPEC, "schema"));
+const useLocal = () => args.has("--local") && existsSync(join(LOCAL_SPEC, "schema"));
 
 const source = (rel) => {
   if (useLocal()) {

@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbook-data-standards.github.io/openbook/schema/maps.schema.json",
+  "title": "OpenBook maps file",
+  "description": "A JSON array of map rows. Not a feed document. Not on the odds wire. Each row is a public key plus an OpenBook market type id, or the unknown catch-all plus a reason.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "publicKey",
+      "id"
+    ],
+    "properties": {
+      "publicKey": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 128,
+        "description": "The public list's market type id (Q220, Q240)."
+      },
+      "id": {
+        "type": "string",
+        "pattern": "^market:[a-z0-9-]+$",
+        "description": "An existing OpenBook market type id (Q221, Q241)."
+      },
+      "reason": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 512,
+        "description": "Free string. Required only when id is market:unknown; forbidden otherwise (Q186, Q201, Q242)."
+      }
+    },
+    "allOf": [
+      {
+        "if": {
+          "properties": {
+            "id": {
+              "const": "market:unknown"
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "then": {
+          "required": [
+            "reason"
+          ]
+        },
+        "else": {
+          "not": {
+            "required": [
+              "reason"
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

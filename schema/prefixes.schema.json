@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbook-data-standards.github.io/openbook/schema/prefixes.schema.json",
+  "title": "OpenBook propertyID prefix file",
+  "description": "A JSON array of plain propertyID scheme tokens. Growable. Not a feed document. Not on the odds wire. Not a Q5 short-form id.",
+  "type": "array",
+  "uniqueItems": true,
+  "minItems": 1,
+  "items": {
+    "type": "string",
+    "pattern": "^[a-z0-9-]+$",
+    "minLength": 1,
+    "maxLength": 128
+  }
+}

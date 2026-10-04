@@ -38,7 +38,8 @@
       "description": "The team (a participant with participantType team)."
     },
     "position": {
-      "type": "string"
+      "type": "string",
+      "description": "Growable position:<sport>:<token> id (vocabularies/positions.md). Unrecognised values are tolerated (Q34)."
     },
     "number": {
       "type": "integer",
