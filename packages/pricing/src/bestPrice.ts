@@ -283,6 +283,9 @@ export function bestPrice(settings: BestPriceSettings = {}): BestPriceBook {
   return {
     apply(records) {
       const list = Array.isArray(records) ? records : [records];
+      // Derive once per market, after every source in the batch has landed, so a
+      // batch carrying two sources for one market queues one change, not two.
+      const touched = new Set<string>();
       for (const record of list) {
         if (record.envelope.object !== "market") continue;
         const doc = record.doc;
@@ -298,7 +301,11 @@ export function bestPrice(settings: BestPriceSettings = {}): BestPriceBook {
         }
         const at = Date.parse(record.envelope.datePublished);
         entry.bySource.set(source, { doc, at: Number.isFinite(at) ? at : now() });
-        deriveAndQueue(entry);
+        touched.add(entry.key);
+      }
+      for (const key of touched) {
+        const entry = markets.get(key);
+        if (entry) deriveAndQueue(entry);
       }
     },
 

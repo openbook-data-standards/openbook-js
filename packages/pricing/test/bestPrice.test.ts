@@ -96,6 +96,15 @@ describe("bestPrice", () => {
     expect(Number(withMargin.models()[0]!.outcomes[0]!.odds)).toBeCloseTo(1.9048, 3);
   });
 
+  it("queues one change per market when a batch carries every source at once", () => {
+    const book = bestPrice({ publisher: "kaz-best" });
+    book.apply([record("f1", "pinnacle", [HOME, AWAY]), record("f1", "draftkings", [HOME, AWAY])]);
+    // Two sources, one market: one snapshot, not one per source.
+    const envelopes = book.envelopes();
+    expect(envelopes).toHaveLength(1);
+    expect(envelopes[0]!.action).toBe("snapshot");
+  });
+
   it("emits a snapshot then a Merge Patch update, and changes() only for what moved", () => {
     const book = bestPrice({ publisher: "kaz-best" });
     book.apply([record("f1", "pinnacle", [HOME, AWAY])]);
