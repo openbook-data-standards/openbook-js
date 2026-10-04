@@ -1,0 +1,11 @@
+openbook-js
+Copyright 2026 the OpenBook authors
+
+This product includes OpenBook JSON Schema files copied from
+https://github.com/openbook-data-standards/openbook (directory schema/).
+Those schema files remain licensed under Creative Commons Attribution 4.0
+International (CC BY 4.0). See the specification repository LICENSE and the
+copy at schema/LICENSE.
+
+The JavaScript and TypeScript code in this repository is licensed under the
+Apache License 2.0. See LICENSE.

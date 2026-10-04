@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbook-data-standards.github.io/openbook/schema/grade.schema.json",
+  "title": "OpenBook grade",
+  "description": "The book's judgement: one market x one source, graded from a segment that is down. `basedOn` is the score `sequence` (the down, or a later correction) it graded from. A grade is never edited: a corrected grade is grade/delete + a new grade/create with `supersedes`.",
+  "type": "object",
+  "required": [
+    "openbookVersion",
+    "sequence",
+    "dateModified",
+    "gradeId",
+    "fixture",
+    "segment",
+    "source",
+    "marketType",
+    "basis",
+    "basedOn",
+    "outcomes"
+  ],
+  "properties": {
+    "@context": {},
+    "@type": {
+      "type": "string"
+    },
+    "openbookVersion": {
+      "$ref": "common.schema.json#/$defs/openbookVersion"
+    },
+    "sequence": {
+      "$ref": "common.schema.json#/$defs/sequence"
+    },
+    "dateModified": {
+      "$ref": "common.schema.json#/$defs/dateTime"
+    },
+    "gradeId": {
+      "$ref": "common.schema.json#/$defs/ownId"
+    },
+    "supersedes": {
+      "$ref": "common.schema.json#/$defs/ownId"
+    },
+    "fixture": {
+      "$ref": "common.schema.json#/$defs/ownId"
+    },
+    "segment": {
+      "$ref": "common.schema.json#/$defs/sharedId"
+    },
+    "source": {
+      "$ref": "common.schema.json#/$defs/ownId"
+    },
+    "marketType": {
+      "$ref": "common.schema.json#/$defs/sharedId"
+    },
+    "line": {
+      "$ref": "common.schema.json#/$defs/decimalString"
+    },
+    "basis": {
+      "$ref": "common.schema.json#/$defs/scoreUnit",
+      "description": "The unit this market graded on (goals, corners, cards...)."
+    },
+    "basedOn": {
+      "$ref": "common.schema.json#/$defs/sequence",
+      "description": "The score message sequence the grade was computed from."
+    },
+    "dateGraded": {
+      "$ref": "common.schema.json#/$defs/dateTime"
+    },
+    "outcomes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "common.schema.json#/$defs/gradeOutcome"
+      }
+    }
+  },
+  "patternProperties": {
+    "^x_": {}
+  },
+  "additionalProperties": false
+}

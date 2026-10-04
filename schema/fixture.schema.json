@@ -1,0 +1,190 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbook-data-standards.github.io/openbook/schema/fixture.schema.json",
+  "title": "OpenBook fixture",
+  "description": "One match \u2014 the base object (schema.org SportsEvent). Publisher-own id plus the standard facts that let consumers match it across publishers. Every participant carries a role (home / away / neutral) AND an order.",
+  "type": "object",
+  "required": [
+    "openbookVersion",
+    "id",
+    "sequence",
+    "dateModified",
+    "sport",
+    "league",
+    "startDate",
+    "participants"
+  ],
+  "properties": {
+    "@context": {},
+    "@type": {
+      "type": "string",
+      "examples": [
+        "SportsEvent"
+      ]
+    },
+    "openbookVersion": {
+      "$ref": "common.schema.json#/$defs/openbookVersion"
+    },
+    "id": {
+      "$ref": "common.schema.json#/$defs/ownId"
+    },
+    "sequence": {
+      "$ref": "common.schema.json#/$defs/sequence"
+    },
+    "dateModified": {
+      "$ref": "common.schema.json#/$defs/dateTime"
+    },
+    "name": {
+      "type": "string"
+    },
+    "sport": {
+      "type": "object",
+      "required": [
+        "id",
+        "name"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "common.schema.json#/$defs/sharedId"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "league": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "territory",
+        "competitionType"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "common.schema.json#/$defs/ownId"
+        },
+        "name": {
+          "type": "string"
+        },
+        "territory": {
+          "$ref": "common.schema.json#/$defs/territory"
+        },
+        "competitionType": {
+          "$ref": "common.schema.json#/$defs/competitionType"
+        },
+        "shortName": {
+          "type": "string"
+        },
+        "registeredName": {
+          "type": "string"
+        },
+        "gender": {
+          "$ref": "common.schema.json#/$defs/gender"
+        },
+        "ageGroup": {
+          "$ref": "common.schema.json#/$defs/ageGroup"
+        },
+        "sameAs": {
+          "$ref": "common.schema.json#/$defs/sameAs"
+        }
+      }
+    },
+    "season": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "common.schema.json#/$defs/ownId"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "stage": {
+      "type": "object",
+      "description": "The leaf stage; walk `parent` on the stage object for the chain.",
+      "properties": {
+        "id": {
+          "$ref": "common.schema.json#/$defs/ownId"
+        },
+        "name": {
+          "type": "string"
+        },
+        "stageType": {
+          "$ref": "common.schema.json#/$defs/stageType"
+        }
+      }
+    },
+    "startDate": {
+      "$ref": "common.schema.json#/$defs/dateTime"
+    },
+    "cutoffDate": {
+      "$ref": "common.schema.json#/$defs/dateTime"
+    },
+    "eventStatus": {
+      "$ref": "common.schema.json#/$defs/eventStatus"
+    },
+    "superEvent": {
+      "$ref": "common.schema.json#/$defs/ownId",
+      "description": "schema.org superEvent. Not a second fixture for live (Q101); pregame and live are one fixture."
+    },
+    "participants": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "territory",
+          "role",
+          "order"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "$ref": "common.schema.json#/$defs/ownId"
+          },
+          "name": {
+            "type": "string"
+          },
+          "territory": {
+            "$ref": "common.schema.json#/$defs/territory"
+          },
+          "role": {
+            "$ref": "common.schema.json#/$defs/role"
+          },
+          "order": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Listing order \u2014 always present, even for two-sided events."
+          },
+          "sameAs": {
+            "$ref": "common.schema.json#/$defs/sameAs"
+          },
+          "seed": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "This draw's seed on the fixture participant row (Q85)."
+          }
+        }
+      }
+    },
+    "location": {
+      "$ref": "common.schema.json#/$defs/place"
+    },
+    "surface": {
+      "$ref": "common.schema.json#/$defs/surface"
+    },
+    "identifier": {
+      "$ref": "common.schema.json#/$defs/identifier"
+    }
+  },
+  "patternProperties": {
+    "^x_": {}
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbook-data-standards.github.io/openbook/schema/season.schema.json",
+  "title": "OpenBook season",
+  "description": "One edition of a league: 2025-26, F1 2026. Publisher-own id.",
+  "type": "object",
+  "required": [
+    "openbookVersion",
+    "id",
+    "sequence",
+    "dateModified",
+    "league",
+    "name"
+  ],
+  "properties": {
+    "@context": {},
+    "@type": {
+      "type": "string"
+    },
+    "openbookVersion": {
+      "$ref": "common.schema.json#/$defs/openbookVersion"
+    },
+    "sequence": {
+      "$ref": "common.schema.json#/$defs/sequence"
+    },
+    "dateModified": {
+      "$ref": "common.schema.json#/$defs/dateTime"
+    },
+    "id": {
+      "$ref": "common.schema.json#/$defs/ownId"
+    },
+    "league": {
+      "$ref": "common.schema.json#/$defs/ownId"
+    },
+    "name": {
+      "type": "string",
+      "description": "Display label (2025/26, F1 2026). Machine bounds are startDate / endDate (Q60)."
+    },
+    "alternateName": {
+      "$ref": "common.schema.json#/$defs/alternateName"
+    },
+    "startDate": {
+      "$ref": "common.schema.json#/$defs/dateTime"
+    },
+    "endDate": {
+      "$ref": "common.schema.json#/$defs/dateTime"
+    },
+    "sameAs": {
+      "$ref": "common.schema.json#/$defs/sameAs"
+    },
+    "identifier": {
+      "$ref": "common.schema.json#/$defs/identifier"
+    }
+  },
+  "patternProperties": {
+    "^x_": {}
+  },
+  "additionalProperties": false
+}

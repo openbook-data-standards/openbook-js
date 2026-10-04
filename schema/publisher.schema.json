@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbook-data-standards.github.io/openbook/schema/publisher.schema.json",
+  "title": "OpenBook publisher",
+  "description": "The feed's own record \u2014 who transmits, and which sources (whose odds) the feed carries. Analogous to GTFS agency.txt.",
+  "type": "object",
+  "required": [
+    "openbookVersion",
+    "id",
+    "sequence",
+    "dateModified",
+    "name",
+    "baseCurrency",
+    "sources"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$",
+      "description": "Publisher id: lowercase, dash-separated; also the <publisher-id> level of stream names."
+    },
+    "sequence": {
+      "$ref": "common.schema.json#/$defs/sequence"
+    },
+    "name": {
+      "type": "string"
+    },
+    "registeredName": {
+      "type": "string",
+      "description": "Optional registry / legal name (Q60). ISO 17442 is the LEI id, not this string."
+    },
+    "inLanguage": {
+      "$ref": "common.schema.json#/$defs/iso6391",
+      "description": "Feed language (Q68). A bare name is in this language."
+    },
+    "baseCurrency": {
+      "$ref": "common.schema.json#/$defs/iso4217",
+      "description": "This feed's accounting currency. Money `{amount}` is in this code. Another currency is another subscription (Q44)."
+    },
+    "url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "sourceType"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "$ref": "common.schema.json#/$defs/ownId"
+          },
+          "name": {
+            "type": "string"
+          },
+          "territory": {
+            "$ref": "common.schema.json#/$defs/territory"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "sourceType": {
+            "$ref": "common.schema.json#/$defs/sourceType"
+          },
+          "sameAs": {
+            "$ref": "common.schema.json#/$defs/sameAs"
+          }
+        }
+      }
+    },
+    "openbookVersion": {
+      "$ref": "common.schema.json#/$defs/openbookVersion"
+    },
+    "dateModified": {
+      "$ref": "common.schema.json#/$defs/dateTime"
+    },
+    "email": {
+      "type": "string"
+    },
+    "heartbeatMs": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Maximum silence on the push stream in milliseconds (Q46). Quiet longer than this, the consumer SHOULD treat the feed as down."
+    },
+    "ttl": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Cache lifetime in seconds (GBFS ttl, Q48). Optional on the publisher record; required on the discovery document."
+    },
+    "@context": {},
+    "@type": {
+      "type": "string",
+      "examples": [
+        "Organization"
+      ]
+    }
+  },
+  "patternProperties": {
+    "^x_": {}
+  },
+  "additionalProperties": false
+}

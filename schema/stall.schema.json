@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbook-data-standards.github.io/openbook/schema/stall.schema.json",
+  "title": "OpenBook stall",
+  "description": "Racing stall/draw for one runner in one race (Q86 leftovers, Q141–Q144). Not on the generic fixture or participant row. Gate is order (1-based, Q111). Not a new live object.",
+  "type": "object",
+  "required": [
+    "openbookVersion",
+    "id",
+    "sequence",
+    "dateModified",
+    "fixture",
+    "participant",
+    "order"
+  ],
+  "properties": {
+    "@context": {},
+    "@type": {
+      "type": "string"
+    },
+    "openbookVersion": {
+      "$ref": "common.schema.json#/$defs/openbookVersion"
+    },
+    "id": {
+      "$ref": "common.schema.json#/$defs/ownId"
+    },
+    "sequence": {
+      "$ref": "common.schema.json#/$defs/sequence"
+    },
+    "dateModified": {
+      "$ref": "common.schema.json#/$defs/dateTime"
+    },
+    "fixture": {
+      "$ref": "common.schema.json#/$defs/ownId",
+      "description": "The race."
+    },
+    "participant": {
+      "$ref": "common.schema.json#/$defs/ownId",
+      "description": "The runner."
+    },
+    "order": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "The gate (1-based)."
+    }
+  },
+  "patternProperties": {
+    "^x_": {}
+  },
+  "additionalProperties": false
+}

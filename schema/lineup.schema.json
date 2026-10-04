@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbook-data-standards.github.io/openbook/schema/lineup.schema.json",
+  "title": "OpenBook lineup",
+  "description": "Starting players for one fixture (Q80). Roster player ids only. Not on the catalog fixture. No formation, substitutions, or predicted lineup (Q82).",
+  "type": "object",
+  "required": [
+    "openbookVersion",
+    "sequence",
+    "dateModified",
+    "fixture",
+    "player"
+  ],
+  "properties": {
+    "@context": {},
+    "@type": {
+      "type": "string"
+    },
+    "openbookVersion": {
+      "$ref": "common.schema.json#/$defs/openbookVersion"
+    },
+    "sequence": {
+      "$ref": "common.schema.json#/$defs/sequence"
+    },
+    "dateModified": {
+      "$ref": "common.schema.json#/$defs/dateTime"
+    },
+    "fixture": {
+      "$ref": "common.schema.json#/$defs/ownId"
+    },
+    "player": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/ownId"
+      },
+      "description": "Roster player ids that started (Q80)."
+    }
+  },
+  "patternProperties": {
+    "^x_": {}
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbook-data-standards.github.io/openbook/schema/market.schema.json",
+  "title": "OpenBook market",
+  "description": "A fixture's market as priced by ONE source \u2014 the document form used by market/snapshot and market/update. Identity: (source, fixture, marketType, segment, line, basis). Price moves arrive as odds/change.",
+  "type": "object",
+  "required": [
+    "openbookVersion",
+    "sequence",
+    "dateModified",
+    "fixture",
+    "marketType",
+    "source",
+    "provenance",
+    "status",
+    "limit",
+    "outcomes"
+  ],
+  "properties": {
+    "@context": {},
+    "@type": {
+      "type": "string"
+    },
+    "openbookVersion": {
+      "$ref": "common.schema.json#/$defs/openbookVersion"
+    },
+    "sequence": {
+      "$ref": "common.schema.json#/$defs/sequence"
+    },
+    "dateModified": {
+      "$ref": "common.schema.json#/$defs/dateTime"
+    },
+    "fixture": {
+      "$ref": "common.schema.json#/$defs/ownId"
+    },
+    "marketType": {
+      "$ref": "common.schema.json#/$defs/sharedId"
+    },
+    "segment": {
+      "$ref": "common.schema.json#/$defs/sharedId"
+    },
+    "line": {
+      "$ref": "common.schema.json#/$defs/decimalString"
+    },
+    "basis": {
+      "$ref": "common.schema.json#/$defs/scoreUnit",
+      "description": "What this market counts (Q98). Same list as score/grade. If omitted, sport/league primaryUnit. Not a new market type."
+    },
+    "source": {
+      "$ref": "common.schema.json#/$defs/ownId"
+    },
+    "provenance": {
+      "$ref": "common.schema.json#/$defs/provenance"
+    },
+    "status": {
+      "$ref": "common.schema.json#/$defs/marketStatus"
+    },
+    "isMain": {
+      "type": "boolean",
+      "description": "The main line among alternates."
+    },
+    "limit": {
+      "$ref": "common.schema.json#/$defs/money",
+      "description": "Max stake/liability in the feed's baseCurrency (Q45). Required on the market document; omitted on a patch unless it changed."
+    },
+    "outcomes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "common.schema.json#/$defs/marketOutcome"
+      }
+    }
+  },
+  "patternProperties": {
+    "^x_": {}
+  },
+  "additionalProperties": false
+}

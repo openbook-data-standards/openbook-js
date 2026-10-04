@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbook-data-standards.github.io/openbook/schema/player.schema.json",
+  "title": "OpenBook player (roster membership)",
+  "description": "A person's membership of a team's roster \u2014 for lineups and player props. The person and the team are both participants. Not a competitor object; individuals who compete are participants.",
+  "type": "object",
+  "required": [
+    "openbookVersion",
+    "id",
+    "sequence",
+    "dateModified",
+    "participant",
+    "team"
+  ],
+  "properties": {
+    "@context": {},
+    "@type": {
+      "type": "string"
+    },
+    "openbookVersion": {
+      "$ref": "common.schema.json#/$defs/openbookVersion"
+    },
+    "sequence": {
+      "$ref": "common.schema.json#/$defs/sequence"
+    },
+    "dateModified": {
+      "$ref": "common.schema.json#/$defs/dateTime"
+    },
+    "id": {
+      "$ref": "common.schema.json#/$defs/ownId"
+    },
+    "participant": {
+      "$ref": "common.schema.json#/$defs/ownId",
+      "description": "The person (a participant with participantType individual)."
+    },
+    "team": {
+      "$ref": "common.schema.json#/$defs/ownId",
+      "description": "The team (a participant with participantType team)."
+    },
+    "position": {
+      "type": "string"
+    },
+    "number": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "throws": {
+      "$ref": "common.schema.json#/$defs/hand",
+      "description": "Throwing or shooting hand (Q88)."
+    },
+    "bats": {
+      "$ref": "common.schema.json#/$defs/hand",
+      "description": "Batting side (Q88). both = switch."
+    },
+    "startDate": {
+      "$ref": "common.schema.json#/$defs/dateTime"
+    },
+    "endDate": {
+      "$ref": "common.schema.json#/$defs/dateTime"
+    },
+    "active": {
+      "type": "boolean",
+      "default": true
+    },
+    "identifier": {
+      "$ref": "common.schema.json#/$defs/identifier"
+    }
+  },
+  "patternProperties": {
+    "^x_": {}
+  },
+  "additionalProperties": false
+}

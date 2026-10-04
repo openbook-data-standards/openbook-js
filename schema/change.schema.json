@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbook-data-standards.github.io/openbook/schema/change.schema.json",
+  "title": "OpenBook change envelope",
+  "description": "One envelope for every message: one object, one action. `changes` is a JSON Merge Patch against the object's schema (absent = unchanged, null = removed). JSON Patch (RFC 6902) is not an alternate (Q91). Mirrors the topic openbook/v1/<publisher>/<object>/<action>/<sport>/<id>.",
+  "type": "object",
+  "required": [
+    "openbookVersion",
+    "sequence",
+    "datePublished",
+    "publisher",
+    "object",
+    "action",
+    "sport",
+    "changes"
+  ],
+  "properties": {
+    "@context": {},
+    "@type": {
+      "type": "string"
+    },
+    "openbookVersion": {
+      "$ref": "common.schema.json#/$defs/openbookVersion"
+    },
+    "sequence": {
+      "$ref": "common.schema.json#/$defs/sequence"
+    },
+    "datePublished": {
+      "$ref": "common.schema.json#/$defs/dateTime"
+    },
+    "publisher": {
+      "$ref": "common.schema.json#/$defs/ownId"
+    },
+    "object": {
+      "$ref": "common.schema.json#/$defs/objectType"
+    },
+    "action": {
+      "$ref": "common.schema.json#/$defs/action"
+    },
+    "sport": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "id": {
+      "$ref": "common.schema.json#/$defs/ownId",
+      "description": "The topic's <id>: the fixture id for fixture-scoped objects, else the object's own id."
+    },
+    "msgType": {
+      "$ref": "common.schema.json#/$defs/msgType"
+    },
+    "reason": {
+      "type": "string"
+    },
+    "references": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/sequence"
+      }
+    },
+    "conflated": {
+      "type": "boolean",
+      "description": "true when this message skipped intermediate ticks (Q47). Sequence still increases."
+    },
+    "changes": {
+      "type": "object"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "change"
+          }
+        },
+        "required": [
+          "action"
+        ]
+      },
+      "then": {
+        "properties": {
+          "object": {
+            "const": "odds"
+          }
+        }
+      }
+    }
+  ],
+  "patternProperties": {
+    "^x_": {}
+  },
+  "additionalProperties": false
+}

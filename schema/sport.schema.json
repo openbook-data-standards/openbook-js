@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbook-data-standards.github.io/openbook/schema/sport.schema.json",
+  "title": "OpenBook sport",
+  "description": "A sport \u2014 shared vocabulary owned by the standard. Disciplines hang beneath (athletics:110m-hurdles).",
+  "type": "object",
+  "required": [
+    "openbookVersion",
+    "id",
+    "name"
+  ],
+  "properties": {
+    "@context": {},
+    "@type": {
+      "type": "string"
+    },
+    "openbookVersion": {
+      "$ref": "common.schema.json#/$defs/openbookVersion"
+    },
+    "id": {
+      "$ref": "common.schema.json#/$defs/sharedId",
+      "examples": [
+        "sport:soccer",
+        "sport:athletics"
+      ]
+    },
+    "name": {
+      "type": "string"
+    },
+    "abbreviation": {
+      "type": "string"
+    },
+    "active": {
+      "type": "boolean",
+      "default": true
+    },
+    "alternateName": {
+      "$ref": "common.schema.json#/$defs/alternateName"
+    },
+    "names": {
+      "$ref": "common.schema.json#/$defs/localizedNames"
+    },
+    "sameAs": {
+      "$ref": "common.schema.json#/$defs/sameAs"
+    },
+    "identifier": {
+      "$ref": "common.schema.json#/$defs/identifier"
+    },
+    "primaryUnit": {
+      "$ref": "common.schema.json#/$defs/scoreUnit"
+    },
+    "limit": {
+      "$ref": "common.schema.json#/$defs/money",
+      "description": "Default stake/liability cap for this sport (Q45). Overridden by a more specific league or market limit."
+    }
+  },
+  "patternProperties": {
+    "^x_": {}
+  },
+  "additionalProperties": false
+}

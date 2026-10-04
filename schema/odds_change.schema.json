@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbook-data-standards.github.io/openbook/schema/odds_change.schema.json",
+  "title": "OpenBook odds/change payload",
+  "description": "The `changes` payload of an odds/change message: only the markets/outcomes whose prices moved (Merge Patch). Each market names its source and provenance. Identity: (source, fixture, marketType, segment, line, basis).",
+  "type": "object",
+  "required": [
+    "markets"
+  ],
+  "properties": {
+    "markets": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "marketType",
+          "source",
+          "provenance",
+          "outcomes"
+        ],
+        "properties": {
+          "segment": {
+            "$ref": "common.schema.json#/$defs/sharedId"
+          },
+          "line": {
+            "$ref": "common.schema.json#/$defs/decimalString",
+            "description": "Handicap / total value for the market, when applicable."
+          },
+          "basis": {
+            "$ref": "common.schema.json#/$defs/scoreUnit",
+            "description": "What this market counts (Q98). If omitted, sport/league primaryUnit."
+          },
+          "status": {
+            "$ref": "common.schema.json#/$defs/marketStatus"
+          },
+          "limit": {
+            "$ref": "common.schema.json#/$defs/money",
+            "description": "Present on a tick only when the limit changed (Merge Patch)."
+          },
+          "source": {
+            "$ref": "common.schema.json#/$defs/ownId",
+            "description": "Whose odds these are \u2014 a source declared in the publisher record."
+          },
+          "provenance": {
+            "$ref": "common.schema.json#/$defs/provenance"
+          },
+          "outcomes": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "common.schema.json#/$defs/marketOutcome"
+            }
+          },
+          "marketType": {
+            "$ref": "common.schema.json#/$defs/sharedId"
+          }
+        },
+        "patternProperties": {
+          "^x_": {}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "patternProperties": {
+    "^x_": {}
+  },
+  "additionalProperties": false
+}

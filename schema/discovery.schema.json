@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbook-data-standards.github.io/openbook/schema/discovery.schema.json",
+  "title": "OpenBook discovery document",
+  "description": "One URL lists a publisher's feeds and additional surfaces (Q49, Q56). GBFS-shaped field names, not a GBFS data wrapper (Q90). Not a list of other publishers (Q94). The publisher object stays identity, not the catalog.",
+  "type": "object",
+  "required": [
+    "lastUpdated",
+    "ttl",
+    "feeds"
+  ],
+  "properties": {
+    "lastUpdated": {
+      "$ref": "common.schema.json#/$defs/dateTime"
+    },
+    "ttl": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Cache lifetime in seconds (Q48)."
+    },
+    "feeds": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "url"
+        ],
+        "additionalProperties": false,
+        "patternProperties": {
+          "^x_": {}
+        },
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Human label for this entry (snapshot, stream, docs, or a plugin name)."
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "For snapshot/stream/docs: the OpenBook surface. For mcp/plugin: that surface's own manifest URL, not an OpenBook document (Q56)."
+          },
+          "kind": {
+            "$ref": "common.schema.json#/$defs/feedKind"
+          },
+          "id": {
+            "$ref": "common.schema.json#/$defs/ownId",
+            "description": "Publisher-own id when listing more than one mcp or plugin entry."
+          },
+          "schemaUrl": {
+            "type": "string",
+            "format": "uri",
+            "description": "URI of the schema that governs the document at url. Required in practice for mcp and plugin; omitted for snapshot/stream (those are OpenBook)."
+          }
+        }
+      }
+    }
+  },
+  "patternProperties": {
+    "^x_": {}
+  },
+  "additionalProperties": false
+}

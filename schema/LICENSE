@@ -1,0 +1,22 @@
+OpenBook — an open standard for sportsbook data
+Copyright (c) 2026 the OpenBook authors.
+
+This specification (all documents, schemas, vocabularies, examples and
+conformance cases in this folder) is licensed under the Creative Commons
+Attribution 4.0 International
+License (CC BY 4.0).
+
+You are free to share and adapt this material for any purpose, including
+commercially, provided you give appropriate credit, link to the license, and
+indicate if changes were made.
+
+Full license text: https://creativecommons.org/licenses/by/4.0/legalcode
+Summary: https://creativecommons.org/licenses/by/4.0/
+
+NOTE ON IMPLEMENTATIONS
+This license covers the specification only. Software that implements OpenBook —
+parsers, pricing engines, trading systems, back-office — is not a derivative of
+this specification and is not governed by this license; it may be kept fully
+proprietary. Any reference tooling published under the OpenBook name (validators,
+conformance suites, reference adapters) will be released separately under the
+Apache License 2.0.

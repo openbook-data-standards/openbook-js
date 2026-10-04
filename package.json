@@ -1,0 +1,29 @@
+{
+  "name": "openbook-js",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "OpenBook JavaScript client: read an OpenBook feed over a socket or HTTP, cache the documents, and bind them to React.",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "gen": "node scripts/gen-types.mjs",
+    "sync": "node scripts/sync-schema.mjs",
+    "check:schema": "node scripts/sync-schema.mjs --check",
+    "check:gen": "node scripts/gen-types.mjs --check",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "build": "npm run build -w @openbook/core && npm run build -w @openbook/react",
+    "ci": "npm run check:schema && npm run check:gen && npm run typecheck && npm run test && npm run build"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "typescript": "5.9.3",
+    "vitest": "^4.1.11"
+  }
+}

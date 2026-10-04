@@ -1,0 +1,140 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbook-data-standards.github.io/openbook/schema/participant.schema.json",
+  "title": "OpenBook participant",
+  "description": "A competitor — a team OR an individual (schema.org SportsTeam / Person). Belongs to a SPORT, never to a league. Publisher-own id; sameAs (Wikidata) as the shared entity id. Names: Q11 / Q57.",
+  "type": "object",
+  "required": [
+    "openbookVersion",
+    "id",
+    "sequence",
+    "dateModified",
+    "name",
+    "territory",
+    "participantType",
+    "sport",
+    "sameAs"
+  ],
+  "properties": {
+    "@context": {},
+    "@type": {
+      "type": "string",
+      "examples": [
+        "SportsTeam",
+        "Person"
+      ]
+    },
+    "openbookVersion": {
+      "$ref": "common.schema.json#/$defs/openbookVersion"
+    },
+    "id": {
+      "$ref": "common.schema.json#/$defs/ownId"
+    },
+    "sequence": {
+      "$ref": "common.schema.json#/$defs/sequence"
+    },
+    "dateModified": {
+      "$ref": "common.schema.json#/$defs/dateTime"
+    },
+    "participantType": {
+      "$ref": "common.schema.json#/$defs/participantType"
+    },
+    "sport": {
+      "$ref": "common.schema.json#/$defs/sharedId"
+    },
+    "territory": {
+      "$ref": "common.schema.json#/$defs/territory"
+    },
+    "name": {
+      "type": "string",
+      "description": "Required popular/board name, UTF-8, diacritics kept."
+    },
+    "shortName": {
+      "type": "string",
+      "description": "Board / ticker form: 'Man City', 'K. De Bruyne'."
+    },
+    "abbreviation": {
+      "type": "string",
+      "description": "Teams only (Q11): 'MCI'."
+    },
+    "location": {
+      "type": "string",
+      "description": "Teams only. NFL-style market city; empty/omit when the board name has no city (Arsenal)."
+    },
+    "nickname": {
+      "type": "string",
+      "description": "Teams only. NFL-style nickname (Giants); omit when unused."
+    },
+    "registeredName": {
+      "type": "string",
+      "description": "Teams only. Registry / FIFA international long name — not ISO."
+    },
+    "alternateName": {
+      "$ref": "common.schema.json#/$defs/alternateName"
+    },
+    "names": {
+      "$ref": "common.schema.json#/$defs/localizedNames"
+    },
+    "nameLatin": {
+      "$ref": "common.schema.json#/$defs/nameLatin"
+    },
+    "familyName": {
+      "type": "string",
+      "description": "Individuals only (vCard N / X.520 / schema.org)."
+    },
+    "givenName": {
+      "type": "string",
+      "description": "Individuals only (vCard N / X.520 / schema.org)."
+    },
+    "sameAs": {
+      "$ref": "common.schema.json#/$defs/sameAs"
+    },
+    "identifier": {
+      "$ref": "common.schema.json#/$defs/identifier"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "participantType": {
+            "const": "individual"
+          }
+        },
+        "required": [
+          "participantType"
+        ]
+      },
+      "then": {
+        "properties": {
+          "abbreviation": false,
+          "location": false,
+          "nickname": false,
+          "registeredName": false
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "participantType": {
+            "const": "team"
+          }
+        },
+        "required": [
+          "participantType"
+        ]
+      },
+      "then": {
+        "properties": {
+          "givenName": false,
+          "familyName": false
+        }
+      }
+    }
+  ],
+  "patternProperties": {
+    "^x_": {}
+  },
+  "additionalProperties": false
+}

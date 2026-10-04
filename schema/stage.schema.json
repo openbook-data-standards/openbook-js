@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbook-data-standards.github.io/openbook/schema/stage.schema.json",
+  "title": "OpenBook stage",
+  "description": "A named slice of a season. Recursive: a stage MAY have a parent stage. Regular Season (phase) \u00b7 Group A (group) \u00b7 Round 14 (round) \u00b7 Matchday 7 \u00b7 Leg 2 \u00b7 Game 3 (seriesGame).",
+  "type": "object",
+  "required": [
+    "openbookVersion",
+    "id",
+    "sequence",
+    "dateModified",
+    "season",
+    "name",
+    "stageType"
+  ],
+  "properties": {
+    "@context": {},
+    "@type": {
+      "type": "string"
+    },
+    "openbookVersion": {
+      "$ref": "common.schema.json#/$defs/openbookVersion"
+    },
+    "id": {
+      "$ref": "common.schema.json#/$defs/ownId"
+    },
+    "sequence": {
+      "$ref": "common.schema.json#/$defs/sequence"
+    },
+    "dateModified": {
+      "$ref": "common.schema.json#/$defs/dateTime"
+    },
+    "season": {
+      "$ref": "common.schema.json#/$defs/ownId"
+    },
+    "name": {
+      "type": "string"
+    },
+    "alternateName": {
+      "$ref": "common.schema.json#/$defs/alternateName"
+    },
+    "parent": {
+      "$ref": "common.schema.json#/$defs/ownId",
+      "description": "The containing stage, if any."
+    },
+    "stageType": {
+      "$ref": "common.schema.json#/$defs/stageType"
+    },
+    "order": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "startDate": {
+      "$ref": "common.schema.json#/$defs/dateTime"
+    },
+    "endDate": {
+      "$ref": "common.schema.json#/$defs/dateTime"
+    },
+    "identifier": {
+      "$ref": "common.schema.json#/$defs/identifier"
+    }
+  },
+  "patternProperties": {
+    "^x_": {}
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbook-data-standards.github.io/openbook/schema/market_type.schema.json",
+  "title": "OpenBook reference_market_type",
+  "description": "A canonical market type \u2014 what can be bet. The controlled market vocabulary is the core contribution of OpenBook.",
+  "type": "object",
+  "required": [
+    "openbookVersion",
+    "id",
+    "name",
+    "genre",
+    "shape",
+    "category"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^market:[a-z0-9-]+$",
+      "examples": [
+        "market:moneyline",
+        "market:total",
+        "market:spread",
+        "market:player-points"
+      ]
+    },
+    "name": {
+      "type": "string",
+      "examples": [
+        "Moneyline",
+        "Total",
+        "Player Points"
+      ]
+    },
+    "genre": {
+      "type": "string",
+      "description": "Grouping label, e.g. 'match', 'player', 'team'."
+    },
+    "shape": {
+      "$ref": "common.schema.json#/$defs/marketShape"
+    },
+    "category": {
+      "$ref": "common.schema.json#/$defs/marketCategory"
+    },
+    "sides": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/side"
+      }
+    },
+    "sequence": {
+      "$ref": "common.schema.json#/$defs/sequence"
+    },
+    "dateModified": {
+      "$ref": "common.schema.json#/$defs/dateTime"
+    },
+    "identifier": {
+      "$ref": "common.schema.json#/$defs/identifier"
+    },
+    "openbookVersion": {
+      "$ref": "common.schema.json#/$defs/openbookVersion"
+    },
+    "isPlayerProp": {
+      "type": "boolean",
+      "default": false
+    },
+    "isTeamProp": {
+      "type": "boolean",
+      "default": false
+    },
+    "isGameProp": {
+      "type": "boolean",
+      "default": false
+    },
+    "@context": {},
+    "@type": {
+      "type": "string"
+    }
+  },
+  "patternProperties": {
+    "^x_": {}
+  }
+}

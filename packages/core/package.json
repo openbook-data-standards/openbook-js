@@ -1,0 +1,32 @@
+{
+  "name": "@openbook/core",
+  "version": "0.3.0",
+  "description": "Read an OpenBook feed over a socket or HTTP, apply the standard's change envelopes, and cache the documents. Framework-free.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "keywords": [
+    "openbook",
+    "sportsbook",
+    "odds",
+    "websocket",
+    "feed"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  }
+}

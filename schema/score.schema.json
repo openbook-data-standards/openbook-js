@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbook-data-standards.github.io/openbook/schema/score.schema.json",
+  "title": "OpenBook score",
+  "description": "The live state of a fixture (score/update): event status, per-segment status (a segment goes `down` ONCE, terminally), clock, and score lines per participant x unit with per-segment breakdown. A correction to a down segment is an erratum (`correction: true`), never a second down.",
+  "type": "object",
+  "required": [
+    "openbookVersion",
+    "sequence",
+    "dateModified",
+    "fixture",
+    "eventStatus",
+    "segments",
+    "scores"
+  ],
+  "properties": {
+    "@context": {},
+    "@type": {
+      "type": "string"
+    },
+    "openbookVersion": {
+      "$ref": "common.schema.json#/$defs/openbookVersion"
+    },
+    "sequence": {
+      "$ref": "common.schema.json#/$defs/sequence"
+    },
+    "dateModified": {
+      "$ref": "common.schema.json#/$defs/dateTime"
+    },
+    "fixture": {
+      "$ref": "common.schema.json#/$defs/ownId"
+    },
+    "eventStatus": {
+      "$ref": "common.schema.json#/$defs/eventStatus"
+    },
+    "statusReason": {
+      "$ref": "common.schema.json#/$defs/statusReason"
+    },
+    "correction": {
+      "type": "boolean",
+      "default": false,
+      "description": "True when this update corrects the scores of an already-down segment (Q31). Status and downAt do not change."
+    },
+    "segments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "segment",
+          "status"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "segment": {
+            "$ref": "common.schema.json#/$defs/sharedId"
+          },
+          "status": {
+            "$ref": "common.schema.json#/$defs/segmentStatus"
+          },
+          "downAt": {
+            "$ref": "common.schema.json#/$defs/dateTime"
+          },
+          "order": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      }
+    },
+    "currentSegment": {
+      "$ref": "common.schema.json#/$defs/sharedId"
+    },
+    "clock": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Integer seconds within the current segment plus the broadcast string.",
+      "properties": {
+        "elapsed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "remaining": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "running": {
+          "type": "boolean"
+        },
+        "display": {
+          "type": "string",
+          "examples": [
+            "67:00",
+            "Q3 07:12",
+            "45:00+2"
+          ]
+        }
+      }
+    },
+    "scores": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "participant",
+          "unit",
+          "total"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "participant": {
+            "$ref": "common.schema.json#/$defs/ownId"
+          },
+          "unit": {
+            "$ref": "common.schema.json#/$defs/scoreUnit"
+          },
+          "total": {
+            "type": "number"
+          },
+          "bySegment": {
+            "type": "object",
+            "description": "segment id -> value in that segment",
+            "additionalProperties": {
+              "type": "number"
+            }
+          },
+          "display": {
+            "type": "string",
+            "description": "For units like tennis points: '30', 'AD'."
+          }
+        }
+      }
+    },
+    "server": {
+      "$ref": "common.schema.json#/$defs/ownId",
+      "description": "Racket sports: the serving participant."
+    }
+  },
+  "patternProperties": {
+    "^x_": {}
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbook-data-standards.github.io/openbook/schema/league.schema.json",
+  "title": "OpenBook league",
+  "description": "Any recurring competition \u2014 the Premier League, the FA Cup, the NBA Cup, the F1 World Championship \u2014 typed by competitionType. Publisher-own id; sameAs (Wikidata) as the shared entity id.",
+  "type": "object",
+  "required": [
+    "openbookVersion",
+    "id",
+    "sequence",
+    "dateModified",
+    "name",
+    "sport",
+    "territory",
+    "competitionType",
+    "sameAs"
+  ],
+  "properties": {
+    "@context": {},
+    "@type": {
+      "type": "string"
+    },
+    "openbookVersion": {
+      "$ref": "common.schema.json#/$defs/openbookVersion"
+    },
+    "id": {
+      "$ref": "common.schema.json#/$defs/ownId"
+    },
+    "sequence": {
+      "$ref": "common.schema.json#/$defs/sequence"
+    },
+    "dateModified": {
+      "$ref": "common.schema.json#/$defs/dateTime"
+    },
+    "name": {
+      "type": "string"
+    },
+    "shortName": {
+      "type": "string"
+    },
+    "registeredName": {
+      "type": "string"
+    },
+    "alternateName": {
+      "$ref": "common.schema.json#/$defs/alternateName"
+    },
+    "names": {
+      "$ref": "common.schema.json#/$defs/localizedNames"
+    },
+    "nameLatin": {
+      "$ref": "common.schema.json#/$defs/nameLatin"
+    },
+    "gender": {
+      "$ref": "common.schema.json#/$defs/gender"
+    },
+    "ageGroup": {
+      "$ref": "common.schema.json#/$defs/ageGroup"
+    },
+    "sport": {
+      "$ref": "common.schema.json#/$defs/sharedId"
+    },
+    "territory": {
+      "$ref": "common.schema.json#/$defs/territory"
+    },
+    "competitionType": {
+      "$ref": "common.schema.json#/$defs/competitionType"
+    },
+    "organizer": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "schema.org organizer \u2014 the NBA, UEFA, the FIA.",
+      "properties": {
+        "id": {
+          "$ref": "common.schema.json#/$defs/ownId"
+        },
+        "name": {
+          "type": "string"
+        },
+        "sameAs": {
+          "$ref": "common.schema.json#/$defs/sameAs"
+        }
+      }
+    },
+    "ruleset": {
+      "type": "object",
+      "properties": {
+        "clockBased": {
+          "type": "boolean"
+        },
+        "clockAscending": {
+          "type": "boolean"
+        },
+        "scoreBased": {
+          "type": "boolean"
+        },
+        "segmentBased": {
+          "type": "boolean"
+        },
+        "hasHalftime": {
+          "type": "boolean"
+        },
+        "allowTies": {
+          "type": "boolean"
+        },
+        "segments": {
+          "type": "array",
+          "items": {
+            "$ref": "common.schema.json#/$defs/sharedId"
+          }
+        },
+        "primaryUnit": {
+          "$ref": "common.schema.json#/$defs/scoreUnit"
+        }
+      }
+    },
+    "limit": {
+      "$ref": "common.schema.json#/$defs/money",
+      "description": "Default stake/liability cap for this league (Q45). Overrides sport; overridden by market."
+    },
+    "sameAs": {
+      "$ref": "common.schema.json#/$defs/sameAs"
+    },
+    "identifier": {
+      "$ref": "common.schema.json#/$defs/identifier"
+    }
+  },
+  "patternProperties": {
+    "^x_": {}
+  },
+  "additionalProperties": false
+}

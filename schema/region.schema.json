@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbook-data-standards.github.io/openbook/schema/region.schema.json",
+  "title": "OpenBook region",
+  "description": "A territory. id = CLDR territory code (ISO 3166-1 alpha-2, or ISO 3166-2 for sub-national teams); names from CLDR; sport-body codes as crosswalks.",
+  "type": "object",
+  "required": ["openbookVersion", "id", "sequence", "dateModified", "name"],
+  "properties": {
+    "@context": {}, "@type": { "type": "string", "examples": ["Country", "AdministrativeArea"] },
+    "openbookVersion": { "$ref": "common.schema.json#/$defs/openbookVersion" },
+    "id": { "$ref": "common.schema.json#/$defs/territory", "examples": ["GB", "GB-ENG", "US-PR", "XK"] },
+    "sequence": { "$ref": "common.schema.json#/$defs/sequence" },
+    "dateModified": { "$ref": "common.schema.json#/$defs/dateTime" },
+    "name": { "type": "string" },
+    "names": { "$ref": "common.schema.json#/$defs/localizedNames" },
+    "parent": { "$ref": "common.schema.json#/$defs/territory" },
+    "iocCode": { "type": ["string", "null"], "pattern": "^[A-Z]{3}$" },
+    "fifaCode": { "type": ["string", "null"], "pattern": "^[A-Z]{3}$" },
+    "sameAs": { "$ref": "common.schema.json#/$defs/sameAs" },
+    "identifier": { "$ref": "common.schema.json#/$defs/identifier" }
+  },
+  "patternProperties": { "^x_": {} },
+  "additionalProperties": false
+}
