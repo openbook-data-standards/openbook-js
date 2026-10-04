@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { snapshotSource, webSocketSource } from "../src/sources.js";
+import { snapshotSource, sseSource, webSocketSource } from "../src/sources.js";
 import type { EnvelopeRecord, OpenBookStatus } from "../src/types.js";
 
 const rec = (seq: number): EnvelopeRecord =>
@@ -90,5 +90,63 @@ describe("snapshotSource", () => {
     expect(fetchImpl).toHaveBeenCalledWith("https://edge.example/openbook/snapshot", expect.anything());
     expect(received).toEqual([[rec(1)]]);
     expect(statuses).toContain("live");
+  });
+});
+
+describe("sseSource", () => {
+  class FakeEventSource {
+    static instances: FakeEventSource[] = [];
+    onopen: (() => void) | null = null;
+    onerror: (() => void) | null = null;
+    closed = false;
+    private listeners = new Map<string, ((event: MessageEvent) => void)[]>();
+    constructor(public url: string) {
+      FakeEventSource.instances.push(this);
+    }
+    addEventListener(type: string, fn: (event: MessageEvent) => void): void {
+      this.listeners.set(type, [...(this.listeners.get(type) ?? []), fn]);
+    }
+    emit(type: string, data: unknown): void {
+      for (const fn of this.listeners.get(type) ?? []) fn({ data: typeof data === "string" ? data : JSON.stringify(data) } as MessageEvent);
+    }
+    close(): void {
+      this.closed = true;
+    }
+  }
+
+  it("resolves a relative URL against an origin and reads the named event", () => {
+    FakeEventSource.instances = [];
+    const statuses: OpenBookStatus[] = [];
+    const received: EnvelopeRecord[][] = [];
+    const record = rec(7);
+    sseSource({
+      url: "/openbook/stream",
+      EventSourceImpl: FakeEventSource as unknown as typeof EventSource,
+    }).start({
+      since: () => 0,
+      records: (rs) => received.push(rs),
+      status: (s) => statuses.push(s),
+    });
+
+    const es = FakeEventSource.instances[0]!;
+    expect(es.url).toMatch(/^https?:\/\/.+\/openbook\/stream/);
+    es.onopen?.();
+    expect(statuses).toContain("live");
+
+    // The edge sends `event: openbook`; each data line is one record.
+    es.emit("openbook", record);
+    expect(received).toEqual([[record]]);
+  });
+
+  it("ignores a frame without an envelope and stops cleanly", () => {
+    FakeEventSource.instances = [];
+    const received: EnvelopeRecord[][] = [];
+    const source = sseSource({ url: "https://edge.example/openbook/stream", EventSourceImpl: FakeEventSource as unknown as typeof EventSource });
+    source.start({ since: () => 0, records: (rs) => received.push(rs), status: () => undefined });
+    const es = FakeEventSource.instances[0]!;
+    es.emit("openbook", { hello: true });
+    expect(received).toHaveLength(0);
+    source.stop();
+    expect(es.closed).toBe(true);
   });
 });

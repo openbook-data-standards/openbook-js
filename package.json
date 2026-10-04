@@ -18,7 +18,7 @@
     "check:gen": "node scripts/gen-types.mjs --check",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
-    "build": "npm run build -w @openbook/core && npm run build -w @openbook/react",
+    "build": "npm run build -w @openbook/core && npm run build -w @openbook/pricing && npm run build -w @openbook/react",
     "ci": "npm run check:schema && npm run check:gen && npm run typecheck && npm run test && npm run build"
   },
   "devDependencies": {

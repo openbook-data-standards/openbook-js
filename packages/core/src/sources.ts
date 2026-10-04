@@ -1,8 +1,9 @@
 // Transports. A `Source` is anything that can hand the client OpenBook envelope
-// records and report a connection status. Two first-party sources ship here: a
-// WebSocket source for a live feed (`ws /ws/openbook`) and an HTTP snapshot
-// source for a client without a socket, server rendering, tests, or first paint.
-// Any other socket or API can feed the same seam.
+// records and report a connection status. Three first-party sources ship here:
+// an SSE source for the browser (`GET /openbook/stream`, one record per `data:`
+// line), a WebSocket source for non-browser consumers (`ws /ws/openbook`), and
+// an HTTP snapshot source for server rendering, tests, or first paint. Any other
+// socket or API can feed the same seam.
 import type { EnvelopeRecord, OpenBookStatus } from "./types.js";
 
 export interface SourceContext {
@@ -40,7 +41,11 @@ function parseFrame(raw: unknown): OpenBookFrame | null {
 }
 
 function withCursor(base: string, since: number, events?: string[]): string {
-  const url = new URL(base);
+  // Resolve relative URLs against the browser's own origin, so a source can be
+  // pointed at a same-origin path (for example `/openbook/stream`). An absolute
+  // URL is used as-is.
+  const origin = typeof window !== "undefined" && window.location?.href ? window.location.href : "http://localhost";
+  const url = new URL(base, origin);
   if (since > 0) url.searchParams.set("since", String(since));
   if (events?.length) url.searchParams.set("events", events.join(","));
   return url.toString();
@@ -192,6 +197,92 @@ export function snapshotSource(options: SnapshotSourceOptions): OpenBookSource {
       stopped = true;
       controller?.abort();
       controller = null;
+    },
+  };
+}
+
+export interface SseSourceOptions {
+  /** Absolute or relative URL of the stream endpoint, e.g. `/openbook/stream`. */
+  url: string;
+  /** Filter to these fixture/object ids. */
+  events?: string[];
+  /** Injectable EventSource, for tests and non-browser runtimes. */
+  EventSourceImpl?: typeof EventSource;
+}
+
+/**
+ * The browser source: opens the edge's server-sent event stream.
+ *
+ * `EventSource` reconnects on its own on a network error and re-sends
+ * `Last-Event-ID`, which the edge replays from. It permanently closes on a bad
+ * response (a non-200 or a non-SSE content type), so this source does NOT
+ * reconnect on its own: a misconfigured endpoint is a config error, not a
+ * transient outage. The store survives a reconnect, so the board is never blank.
+ *
+ * The edge sends a **named** event (`event: openbook`), so `onmessage` does not
+ * fire; subscribe to "openbook" (and the default "message" for robustness). Each
+ * `data:` line is **one** record, unlike the WebSocket frame's `records` array.
+ */
+export function sseSource(options: SseSourceOptions): OpenBookSource {
+  let source: EventSource | null = null;
+  let context: SourceContext | null = null;
+  let stopped = true;
+
+  const handle = (raw: string): void => {
+    const ctx = context;
+    if (!ctx) return;
+    const frame = parseFrame(raw);
+    if (!frame) return;
+    // SSE carries one record per data line; the WS frame carries an array.
+    const record = frame as unknown as { envelope?: EnvelopeRecord };
+    if (!record || record.envelope === undefined) return;
+    ctx.records([record as unknown as EnvelopeRecord]);
+  };
+
+  function open(): void {
+    if (stopped || !context) return;
+    const Impl = options.EventSourceImpl ?? (typeof EventSource !== "undefined" ? EventSource : undefined);
+    if (!Impl) {
+      context.status("off");
+      return;
+    }
+    const ctx = context;
+    ctx.status("connecting");
+    const es = new Impl(withCursor(options.url, ctx.since(), options.events));
+    source = es;
+    es.onopen = () => ctx.status("live");
+    // The edge sends `event: openbook`; the default channel is also listened to.
+    es.addEventListener("openbook", (event: MessageEvent) => handle(String(event.data)));
+    es.addEventListener("message", (event: MessageEvent) => handle(String(event.data)));
+    // EventSource reconnects natively on a network error (readyState stays
+    // CONNECTING) and permanently closes on a bad response (readyState CLOSED).
+    // Either way the status is enough; there is no manual reopen.
+    es.onerror = () => {
+      if (stopped) return;
+      ctx.status("reconnecting");
+    };
+  }
+
+  return {
+    name: "sse",
+    start(ctx) {
+      context = ctx;
+      stopped = false;
+      open();
+    },
+    stop() {
+      stopped = true;
+      const es = source;
+      source = null;
+      if (es) {
+        es.onopen = null;
+        es.onerror = null;
+        try {
+          es.close();
+        } catch {
+          /* already closed */
+        }
+      }
     },
   };
 }
