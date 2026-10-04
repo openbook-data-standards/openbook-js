@@ -69,9 +69,9 @@ export class OpenBookStore {
 
   /** Every document of one type, each with the envelope that produced it. */
   records(object: string): AppliedRecord[] {
-    const prefix = `${object}:`;
     const out: AppliedRecord[] = [];
     for (const [key, doc] of this.cache) {
+      if (!key.startsWith(`${object}:`)) continue;
       const envelope = this.envelopeByKey.get(key);
       if (envelope) out.push({ key, doc, envelope });
     }
