@@ -7,11 +7,14 @@ export {
   useOpenBookVersion,
   useOpenBookDoc,
   useOpenBookDocs,
+  useOpenBookRecord,
+  useOpenBookRecords,
   useOpenBookStatus,
   useOpenBookLastSequence,
 } from "./hooks.js";
 
 export type {
+  AppliedRecord,
   OpenBookClient,
   OpenBookDoc,
   OpenBookStatus,

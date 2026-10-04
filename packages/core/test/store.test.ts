@@ -60,5 +60,16 @@ describe("OpenBookStore", () => {
 
     store.apply(record(7, "fixture", "f1", "delete", {}));
     expect(store.get("fixture", "f1")).toBeUndefined();
+    expect(store.getEnvelope("fixture", "f1")).toBeUndefined();
+  });
+
+  it("retains the envelope for each document", () => {
+    const store = new OpenBookStore();
+    store.apply(record(1, "market", "m1", "snapshot", { id: "m1" }));
+    store.apply(record(2, "market", "m2", "snapshot", { id: "m2" }));
+
+    expect(store.getEnvelope("market", "m1")?.sequence).toBe(1);
+    expect(store.getRecord("market", "m2")?.doc).toEqual({ id: "m2" });
+    expect(store.records("market").map((r) => r.key)).toEqual(["market:m1", "market:m2"]);
   });
 });

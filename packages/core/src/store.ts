@@ -13,6 +13,7 @@ export interface AppliedRecord {
 
 export class OpenBookStore {
   private readonly cache = new Map<string, OpenBookDoc>();
+  private readonly envelopeByKey = new Map<string, ChangeEnvelope>();
   private sequence = 0;
   private version = 0;
   private readonly listeners = new Set<() => void>();
@@ -53,6 +54,30 @@ export class OpenBookStore {
     return [...this.cache.keys()];
   }
 
+  /** The last envelope that produced a document. */
+  getEnvelope(object: string, id = ""): ChangeEnvelope | undefined {
+    return this.envelopeByKey.get(`${object}:${id}`);
+  }
+
+  /** One document with the envelope that produced it. */
+  getRecord(object: string, id = ""): AppliedRecord | undefined {
+    const key = `${object}:${id}`;
+    const doc = this.cache.get(key);
+    const envelope = this.envelopeByKey.get(key);
+    return doc && envelope ? { key, doc, envelope } : undefined;
+  }
+
+  /** Every document of one type, each with the envelope that produced it. */
+  records(object: string): AppliedRecord[] {
+    const prefix = `${object}:`;
+    const out: AppliedRecord[] = [];
+    for (const [key, doc] of this.cache) {
+      const envelope = this.envelopeByKey.get(key);
+      if (envelope) out.push({ key, doc, envelope });
+    }
+    return out;
+  }
+
   /** Apply one envelope record. Returns the changed document, or null for a control frame. */
   apply(record: EnvelopeRecord): AppliedRecord | null {
     const envelope = record.envelope;
@@ -66,6 +91,7 @@ export class OpenBookStore {
     const key = recordKey(envelope);
     if (envelope.action === "delete") {
       this.cache.delete(key);
+      this.envelopeByKey.delete(key);
       this.emit();
       return null;
     }
@@ -76,6 +102,7 @@ export class OpenBookStore {
         ? (structuredClone(envelope.changes) as OpenBookDoc)
         : (applyMergePatch(previous ?? {}, envelope.changes) as OpenBookDoc);
     this.cache.set(key, next);
+    this.envelopeByKey.set(key, envelope);
     this.emit();
     return { key, doc: next, envelope };
   }
@@ -87,6 +114,7 @@ export class OpenBookStore {
   /** Forget everything. The resume cursor is reset too. */
   reset(): void {
     this.cache.clear();
+    this.envelopeByKey.clear();
     this.sequence = 0;
     this.emit();
   }
