@@ -7,11 +7,13 @@ export { applyMergePatch, mergePatch } from "./mergePatch.js";
 export {
   webSocketSource,
   snapshotSource,
+  sseSource,
   type OpenBookSource,
   type OpenBookFrame,
   type SourceContext,
   type WebSocketSourceOptions,
   type SnapshotSourceOptions,
+  type SseSourceOptions,
 } from "./sources.js";
 export { recordKey, OPENBOOK_SPEC_VERSION } from "./types.js";
 export type { EnvelopeRecord, OpenBookDoc, OpenBookStatus, ChangeEnvelope } from "./types.js";

@@ -3,11 +3,13 @@
 JavaScript client for [OpenBook](https://github.com/openbook-data-standards/openbook),
 the open standard for sportsbook & gambling data.
 
-It reads an OpenBook feed — the standard's `change` envelopes over a WebSocket or
-an HTTP snapshot — applies the JSON Merge Patch (`changes`), and caches the
-documents by `(object, id)`. `@openbook/react` binds that cache to React.
+It reads an OpenBook feed — the standard's `change` envelopes over a WebSocket,
+server-sent events or an HTTP snapshot — applies the JSON Merge Patch
+(`changes`), and caches the documents by `(object, id)`. `@openbook/react` binds
+that cache to React, and `@openbook/pricing` derives a price across the sources.
 
 - Framework-free core: `@openbook/core`.
+- Pricing across sources: `@openbook/pricing`.
 - React provider and hooks: `@openbook/react`.
 - Types generated from the standard's JSON Schema, so they cannot drift.
 
@@ -81,7 +83,8 @@ its edge and re-published.
 
 | Package | What it is |
 | --- | --- |
-| [`@openbook/core`](packages/core) | Envelope types, Merge Patch, the document store, and the WebSocket and HTTP-snapshot sources. |
+| [`@openbook/core`](packages/core) | Envelope types, Merge Patch, the document store, and the WebSocket, SSE and HTTP-snapshot sources. |
+| [`@openbook/pricing`](packages/pricing) | Derive a best price across the sources on a feed, as an OpenBook `market`. |
 | [`@openbook/react`](packages/react) | `OpenBookProvider` and the `useOpenBook*` hooks. |
 
 ## Schema and versioning

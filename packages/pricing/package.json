@@ -1,0 +1,35 @@
+{
+  "name": "@openbook/pricing",
+  "version": "0.1.0",
+  "description": "OpenBook pricing: derive a best price across sources from the standard's market documents. Framework-free.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "keywords": [
+    "openbook",
+    "sportsbook",
+    "odds",
+    "pricing",
+    "best-price"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@openbook/core": "^0.3.0"
+  }
+}

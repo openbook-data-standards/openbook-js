@@ -23,7 +23,7 @@ jobs:
       - run: npm run typecheck
       - run: npm run test
       - run: npm run build
-      - name: Publish @openbook/core and @openbook/react
+      - name: Publish @openbook/core, @openbook/pricing and @openbook/react
         run: npm publish --workspaces --access public --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
